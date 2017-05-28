@@ -35,7 +35,6 @@ public class PreuzmiMeteoPodatke extends Thread {
 
     private void dbDriver(String db_driver) {
         try {
-            System.out.println("ISPIS: " + db_driver);
             Class.forName(db_driver);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(PreuzmiMeteoPodatke.class.getName()).log(Level.SEVERE, null, ex);
@@ -131,7 +130,6 @@ public class PreuzmiMeteoPodatke extends Thread {
             } catch (InterruptedException ex) {
                 Logger.getLogger(PreuzmiMeteoPodatke.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
     }
 

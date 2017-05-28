@@ -17,6 +17,8 @@ import org.foi.nwtis.ljakopov.konfiguracije.NeispravnaKonfiguracija;
 import org.foi.nwtis.ljakopov.konfiguracije.NemaKonfiguracije;
 import org.foi.nwtis.ljakopov.konfiguracije.bp.BP_Konfiguracija;
 import org.foi.nwtis.ljakopov.web.dretve.PreuzmiMeteoPodatke;
+import org.foi.nwtis.ljakopov.web.dretve.ServerSustava;
+import org.foi.nwtis.ljakopov.ws.serveri.MeteoServiceWS;
 
 /**
  * Web application lifecycle listener.
@@ -27,6 +29,7 @@ public class SlusacAplikacije implements ServletContextListener {
 
     private ServletContext context = null;
     private PreuzmiMeteoPodatke pmp = null;
+    private ServerSustava ss = null;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -42,17 +45,22 @@ public class SlusacAplikacije implements ServletContextListener {
         Konfiguracija konf = null;
         try {
             konf = KonfiguracijaApstraktna.preuzmiKonfiguraciju(datoteka);
+            MeteoServiceWS.konf = konf;
             context.setAttribute("Mail_Konfig", konf);
         } catch (NemaKonfiguracije | NeispravnaKonfiguracija ex) {
             Logger.getLogger(SlusacAplikacije.class.getName()).log(Level.SEVERE, null, ex);
         }
         pokreniServer();
     }
-    
-    private void pokreniServer(){
-        pmp = new PreuzmiMeteoPodatke();
+
+    private void pokreniServer() {
+        /*pmp = new PreuzmiMeteoPodatke();
+        ss = new ServerSustava();
+        ss.setSc(context);
         pmp.setSc(context);
         pmp.start();
+        ss.start();
+         */
     }
 
     @Override
