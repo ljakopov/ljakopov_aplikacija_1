@@ -137,7 +137,7 @@ public class MeteoServiceWS {
                 Logger.getLogger(MeteoServiceWS.class.getName()).log(Level.SEVERE, null, ex);
             }
             long kraj = System.currentTimeMillis();
-            upisiUDnevnik(username, (int) (kraj - pocetak), "dajZadnjiMeteoPodatakZaUredjaj()", "SOAP-web servis prva metoda");
+            upisiUDnevnik(username, (int) (kraj - pocetak), "dajZadnjiMeteoPodatakZaUredjaj()", "SOAP-web");
         }
         return meteoPodaci;
     }
@@ -165,7 +165,7 @@ public class MeteoServiceWS {
                 Logger.getLogger(MeteoServiceWS.class.getName()).log(Level.SEVERE, null, ex);
             }
             long kraj = System.currentTimeMillis();
-            upisiUDnevnik(username, (int) (kraj - pocetak), "dajPosljednihNMeteoPodatakaZaUredjaj()", "SOAP-web servis druga metoda");
+            upisiUDnevnik(username, (int) (kraj - pocetak), "dajPosljednihNMeteoPodatakaZaUredjaj()", "SOAP-web");
         }
         return listaMeteroloskiPodataka;
     }
@@ -199,7 +199,7 @@ public class MeteoServiceWS {
                 Logger.getLogger(MeteoServiceWS.class.getName()).log(Level.SEVERE, null, ex);
             }
             long kraj = System.currentTimeMillis();
-            upisiUDnevnik(username, (int) (kraj - pocetak), "dajMeteoPodatkeZaUredjajOdDoDatum()", "SOAP-web servis treca metoda");
+            upisiUDnevnik(username, (int) (kraj - pocetak), "dajMeteoPodatkeZaUredjajOdDoDatum()", "SOAP-web");
 
         }
         return listaMeteroloskiPodataka;
@@ -229,7 +229,7 @@ public class MeteoServiceWS {
                 Logger.getLogger(MeteoServiceWS.class.getName()).log(Level.SEVERE, null, ex);
             }
             long kraj = System.currentTimeMillis();
-            upisiUDnevnik(username, (int) (kraj - pocetak), "dajMeteoPodatkeZaUredjaj()", "SOAP-web servis cetvrta metoda");
+            upisiUDnevnik(username, (int) (kraj - pocetak), "dajMeteoPodatkeZaUredjaj()", "SOAP-web");
         }
 
         return meteoPodaci;
@@ -246,7 +246,7 @@ public class MeteoServiceWS {
             GMKlijent gmk = new GMKlijent();
             mjesto = gmk.getGeoLocationFromLatLot(lat, lon);
             long kraj = System.currentTimeMillis();
-            upisiUDnevnik(username, (int) (kraj - pocetak), "dajAdresuNaTemeljuLatLon()", "SOAP-web servis peta metoda");
+            upisiUDnevnik(username, (int) (kraj - pocetak), "dajAdresuNaTemeljuLatLon()", "SOAP-web");
         }
         return mjesto;
     }

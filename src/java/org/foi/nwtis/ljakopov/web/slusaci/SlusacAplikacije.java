@@ -16,6 +16,9 @@ import org.foi.nwtis.ljakopov.konfiguracije.KonfiguracijaApstraktna;
 import org.foi.nwtis.ljakopov.konfiguracije.NeispravnaKonfiguracija;
 import org.foi.nwtis.ljakopov.konfiguracije.NemaKonfiguracije;
 import org.foi.nwtis.ljakopov.konfiguracije.bp.BP_Konfiguracija;
+import org.foi.nwtis.ljakopov.pomoc.BazaPodataka;
+import org.foi.nwtis.ljakopov.rest.serveri.MeteoRESTResourceContainer;
+import org.foi.nwtis.ljakopov.rest.serveri.UserRESTsResourceContainer;
 import org.foi.nwtis.ljakopov.web.dretve.PreuzmiMeteoPodatke;
 import org.foi.nwtis.ljakopov.web.dretve.ServerSustava;
 import org.foi.nwtis.ljakopov.ws.serveri.MeteoServiceWS;
@@ -46,6 +49,7 @@ public class SlusacAplikacije implements ServletContextListener {
         try {
             konf = KonfiguracijaApstraktna.preuzmiKonfiguraciju(datoteka);
             MeteoServiceWS.konf = konf;
+            BazaPodataka.konf = konf;
             context.setAttribute("Mail_Konfig", konf);
         } catch (NemaKonfiguracije | NeispravnaKonfiguracija ex) {
             Logger.getLogger(SlusacAplikacije.class.getName()).log(Level.SEVERE, null, ex);
