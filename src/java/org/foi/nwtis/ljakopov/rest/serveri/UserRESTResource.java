@@ -13,30 +13,25 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
-import javax.faces.context.FacesContext;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
 import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.handler.MessageContext;
 import org.foi.nwtis.ljakopov.pomoc.BazaPodataka;
 import org.foi.nwtis.ljakopov.pomoc.Dnevnik;
 
 /**
  * REST Web Service
  *
- * @author User
+ * @author ljakopov
  */
 public class UserRESTResource {
 
@@ -114,7 +109,7 @@ public class UserRESTResource {
             Logger.getLogger(UserRESTsResourceContainer.class.getName()).log(Level.SEVERE, null, ex);
         }
         long kraj = System.currentTimeMillis();
-        Dnevnik.upisiUDnevnik(connection, korisnickoIme, (int) (kraj - pocetak), "getJson()-userID", "REST-web", "", "");
+        Dnevnik.upisiUDnevnik(connection, korisnickoIme, (int) (kraj - pocetak), "getJson()-userID", "REST-web", "localhost", "/ljakopov_aplikacija_1/webresources/userREST/"+korisnickoIme);
 
         return jab.build().toString();
     }
@@ -126,6 +121,7 @@ public class UserRESTResource {
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces("text/plain")
     public String putJson(String content) {
         long pocetak = System.currentTimeMillis();
         JsonReader reader = Json.createReader(new StringReader(content));
@@ -152,15 +148,11 @@ public class UserRESTResource {
             } catch (SQLException ex) {
                 Logger.getLogger(UserRESTResource.class.getName()).log(Level.SEVERE, null, ex);
             }
-            JsonObjectBuilder job = Json.createObjectBuilder();
-            job.add("odgovor", "1");
             long kraj = System.currentTimeMillis();
-            Dnevnik.upisiUDnevnik(connection, korisnickoIme, (int) (kraj - pocetak), "putJson()-user", "REST-web", "", "");
-            return job.build().toString();
+            Dnevnik.upisiUDnevnik(connection, korisnickoIme, (int) (kraj - pocetak), "putJson()-user", "REST-web", "localhost", "/ljakopov_aplikacija_1/webresources/userREST/"+korisnickoIme);
+            return "1";
         } else {
-            JsonObjectBuilder job = Json.createObjectBuilder();
-            job.add("odgovor", "0");
-            return job.build().toString();
+            return "0";
         }
     }
 

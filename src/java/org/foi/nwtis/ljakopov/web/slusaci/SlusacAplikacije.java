@@ -52,7 +52,7 @@ public class SlusacAplikacije implements ServletContextListener {
         } catch (NemaKonfiguracije | NeispravnaKonfiguracija ex) {
             Logger.getLogger(SlusacAplikacije.class.getName()).log(Level.SEVERE, null, ex);
         }
-        pokreniServer();
+       // pokreniServer();
         pokreniPreuzimanjePodataka();
     }
 

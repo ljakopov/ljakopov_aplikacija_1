@@ -100,7 +100,7 @@ public class UserRESTsResourceContainer {
         }
 
         long kraj = System.currentTimeMillis();
-        Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "getJson()-user", "REST-web", "", "");
+        Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "getJson()-user", "REST-web", "localhost", "/ljakopov_aplikacija_1/webresources/userREST");
         return jab.build().toString();
     }
 
@@ -112,7 +112,7 @@ public class UserRESTsResourceContainer {
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces("text/plain")
     public String postJson(String content) {
         long pocetak = System.currentTimeMillis();
         JsonReader reader = Json.createReader(new StringReader(content));
@@ -123,10 +123,6 @@ public class UserRESTsResourceContainer {
         String prezime = jo.getString("prezime");
         String email = jo.getString("email");
 
-        System.out.println("username: " + username);
-        System.out.println("pass: " + pass);
-        System.out.println("prezime: " + prezime);
-        System.out.println("email: " + email);
         Connection connection = BazaPodataka.konekcijaNaBazu(c);
 
         if (provjeriKorisnickoImeILozinku(username) == false) {
@@ -143,15 +139,11 @@ public class UserRESTsResourceContainer {
             } catch (SQLException ex) {
                 Logger.getLogger(MeteoServiceWS.class.getName()).log(Level.SEVERE, null, ex);
             }
-            JsonObjectBuilder job = Json.createObjectBuilder();
-            job.add("odgovor", "1");
             long kraj = System.currentTimeMillis();
-            Dnevnik.upisiUDnevnik(connection, username, (int) (kraj - pocetak), "postJson()-user", "REST-web", "", "");
-            return job.build().toString();
+            Dnevnik.upisiUDnevnik(connection, username, (int) (kraj - pocetak), "postJson()-user", "REST-web", "localhost", "/ljakopov_aplikacija_1/webresources/userREST");
+            return "1";
         } else {
-            JsonObjectBuilder job = Json.createObjectBuilder();
-            job.add("odgovor", "0");
-            return job.build().toString();
+            return "0";
         }
     }
 

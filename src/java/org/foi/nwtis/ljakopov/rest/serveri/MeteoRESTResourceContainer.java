@@ -112,7 +112,7 @@ public class MeteoRESTResourceContainer {
             jab.add(job);
         }
         long kraj = System.currentTimeMillis();
-        Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "getJson()-meteo", "REST-web", "", "");
+        Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "getJson()-meteo", "REST-web", "localhost", "/ljakopov_aplikacija_1/webresources/meteoRESTs");
 
         return jab.build().toString();
     }
@@ -125,7 +125,7 @@ public class MeteoRESTResourceContainer {
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces("text/plain")
     public String postJson(String content) {
         long pocetak = System.currentTimeMillis();
         JsonReader reader = Json.createReader(new StringReader(content));
@@ -156,16 +156,12 @@ public class MeteoRESTResourceContainer {
                 unesiUredjaj.executeUpdate();
             } catch (SQLException ex) {
                 Logger.getLogger(MeteoRESTResourceContainer.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            JsonObjectBuilder job = Json.createObjectBuilder();
-            job.add("odgovor", "1");
+            }            
             long kraj = System.currentTimeMillis();
-            Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "postJson()-meteo", "REST-web", "", "");
-            return job.build().toString();
+            Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "postJson()-meteo", "REST-web", "localhost", "/ljakopov_aplikacija_1/webresources/meteoREST");
+            return "1";
         } else {
-            JsonObjectBuilder job = Json.createObjectBuilder();
-            job.add("odgovor", "0");
-            return job.build().toString();
+            return "0";
         }
     }
 
