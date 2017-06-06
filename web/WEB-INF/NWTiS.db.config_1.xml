@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-<comment>NWTIS konfiguracija - MySQL</comment>
-<entry key="server.database">jdbc:mysql://127.0.0.1/</entry>
-<entry key="admin.username">nwtis_admin</entry>
-<entry key="admin.password">nwtis_foi</entry>
-<entry key="admin.database">mysql</entry>
-<entry key="user.username">nwtis_g2</entry>
-<entry key="user.password">g2_nwtis</entry>
-<entry key="user.database">nwtis_g2_projekt</entry>
-<entry key="driver.database.odbc">sun.jdbc.odbc.JdbcOdbcDriver</entry>
-<entry key="driver.database.mysql">com.mysql.jdbc.Driver</entry>
-<entry key="driver.database.derby">org.apache.derby.jdbc.ClientDriver</entry>
-<entry key="driver.database.postgresql">org.postgresql.Driver</entry>
-<entry key="intervalDretveZaMeteoPodatke">1200</entry>
-<entry key="apikey">73f8bbb7d2439f4fdf7d2bc55acd4ebf</entry>
-<entry key="port">8000</entry>
+    <comment>NWTIS konfiguracija - MySQL</comment>
+    <entry key="server.database">jdbc:mysql://127.0.0.1/</entry>
+    <entry key="admin.username">nwtis_admin</entry>
+    <entry key="admin.password">nwtis_foi</entry>
+    <entry key="admin.database">mysql</entry>
+    <entry key="user.username">nwtis_g2</entry>
+    <entry key="user.password">g2_nwtis</entry>
+    <entry key="user.database">nwtis_g2_projekt</entry>
+    <entry key="driver.database.odbc">sun.jdbc.odbc.JdbcOdbcDriver</entry>
+    <entry key="driver.database.mysql">com.mysql.jdbc.Driver</entry>
+    <entry key="driver.database.derby">org.apache.derby.jdbc.ClientDriver</entry>
+    <entry key="driver.database.postgresql">org.postgresql.Driver</entry>
+    <entry key="intervalDretveZaMeteoPodatke">60</entry>
+    <entry key="apikey">73f8bbb7d2439f4fdf7d2bc55acd4ebf</entry>
+    <entry key="port">8000</entry>
 </properties>

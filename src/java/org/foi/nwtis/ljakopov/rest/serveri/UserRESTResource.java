@@ -13,18 +13,23 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
+import javax.faces.context.FacesContext;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 import org.foi.nwtis.ljakopov.pomoc.BazaPodataka;
 import org.foi.nwtis.ljakopov.pomoc.Dnevnik;
 
@@ -37,7 +42,7 @@ public class UserRESTResource {
 
     @Resource
     WebServiceContext wsContext;
-    
+
     private String korisnickoIme;
     private Connection c;
 
@@ -47,12 +52,11 @@ public class UserRESTResource {
     private UserRESTResource(String korisnickoIme) {
         this.korisnickoIme = korisnickoIme;
     }
-    
+
     private boolean provjeriKorisnickoIme(String korisnickoIme) {
         String provjeraKorisnika = "SELECT username FROM korisnik WHERE username = ?";
         Connection connection = BazaPodataka.konekcijaNaBazu(c);
         boolean provjera = false;
-        
 
         PreparedStatement ps;
         try {
@@ -110,7 +114,7 @@ public class UserRESTResource {
             Logger.getLogger(UserRESTsResourceContainer.class.getName()).log(Level.SEVERE, null, ex);
         }
         long kraj = System.currentTimeMillis();
-        Dnevnik.upisiUDnevnik(connection, korisnickoIme, (int) (kraj - pocetak), "getJson()-userID", "REST-web");
+        Dnevnik.upisiUDnevnik(connection, korisnickoIme, (int) (kraj - pocetak), "getJson()-userID", "REST-web", "", "");
 
         return jab.build().toString();
     }
@@ -127,7 +131,7 @@ public class UserRESTResource {
         JsonReader reader = Json.createReader(new StringReader(content));
         JsonObject jo = reader.readObject();
         Connection connection = BazaPodataka.konekcijaNaBazu(c);
-        
+
         String pass = jo.getString("pass");
         String prezime = jo.getString("prezime");
         String email = jo.getString("email");
@@ -151,7 +155,7 @@ public class UserRESTResource {
             JsonObjectBuilder job = Json.createObjectBuilder();
             job.add("odgovor", "1");
             long kraj = System.currentTimeMillis();
-            Dnevnik.upisiUDnevnik(connection, korisnickoIme, (int) (kraj - pocetak), "putJson()-user", "REST-web");
+            Dnevnik.upisiUDnevnik(connection, korisnickoIme, (int) (kraj - pocetak), "putJson()-user", "REST-web", "", "");
             return job.build().toString();
         } else {
             JsonObjectBuilder job = Json.createObjectBuilder();

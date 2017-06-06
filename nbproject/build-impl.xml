@@ -857,7 +857,7 @@ exists or setup the property manually. For example like this:
     <target depends="init" if="no.dist.ear.dir" name="deps-module-jar" unless="no.deps"/>
     <target depends="init" if="dist.ear.dir" name="deps-ear-jar" unless="no.deps"/>
     <target depends="init, deps-module-jar, deps-ear-jar" name="deps-jar" unless="no.deps"/>
-    <target depends="init,deps-jar" name="-pre-pre-compile">
+    <target depends="init,deps-jar,wsimport-client-generate" name="-pre-pre-compile">
         <mkdir dir="${build.classes.dir}"/>
     </target>
     <target name="-pre-compile">
@@ -1008,6 +1008,8 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.restapi.classpath}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${libs.restlib.classpath}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.javax.json.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${libs.Display_tag.classpath}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${libs.jstl.classpath}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
@@ -1021,6 +1023,8 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.restapi.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.restlib.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.javax.json.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${libs.Display_tag.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${libs.jstl.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="-clean-webinf-lib">
         <delete dir="${build.web.dir}/WEB-INF/lib"/>

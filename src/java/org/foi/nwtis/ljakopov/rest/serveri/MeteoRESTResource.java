@@ -124,7 +124,7 @@ public class MeteoRESTResource {
                 job.add("lon", uredjaj.getGeoloc().getLongitude());
                 jab.add(job);
                 long kraj = System.currentTimeMillis();
-                Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "getJson()-meteo", "REST-web");
+                Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "getJson()-meteo", "REST-web", "", "");
                 return jab.build().toString();
             }
         }
@@ -164,7 +164,7 @@ public class MeteoRESTResource {
             JsonObjectBuilder job = Json.createObjectBuilder();
             job.add("odgovor", "1");
             long kraj = System.currentTimeMillis();
-            Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "putJson()-meteo", "REST-web");
+            Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "putJson()-meteo", "REST-web", "", "");
             return job.build().toString();
         } else {
             JsonObjectBuilder job = Json.createObjectBuilder();

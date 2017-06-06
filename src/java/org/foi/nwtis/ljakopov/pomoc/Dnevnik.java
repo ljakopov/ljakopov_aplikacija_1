@@ -20,15 +20,15 @@ import org.foi.nwtis.ljakopov.ws.serveri.MeteoServiceWS;
  */
 public class Dnevnik {
 
-    public static void upisiUDnevnik(Connection c, String korisnik, int trajanje, String metoda, String opis) {
+    public static void upisiUDnevnik(Connection c, String korisnik, int trajanje, String metoda, String opis, String ipAdress, String url) {
         String spremiDnevnikUBazu = "INSERT INTO dnevnik(`id`, `korisnik`, `url`, `ipadresa`, `vrijeme`, `trajanje`, `status`, `metoda`, `opis`) VALUES "
                 + "(default,?,?,?,?,?,?,?,?)";
         PreparedStatement ps;
         try {
             ps = c.prepareStatement(spremiDnevnikUBazu);
             ps.setString(1, korisnik);
-            ps.setString(2, "");
-            ps.setString(3, "");
+            ps.setString(2, url);
+            ps.setString(3, ipAdress);
             ps.setString(4, new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()));
             ps.setInt(5, trajanje);
             ps.setInt(6, 0);

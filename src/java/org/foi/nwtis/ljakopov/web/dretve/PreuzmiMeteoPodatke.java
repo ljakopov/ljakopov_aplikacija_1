@@ -86,43 +86,60 @@ public class PreuzmiMeteoPodatke extends Thread {
         int trajanjeCiklusa = Integer.parseInt(konf.dajPostavku("intervalDretveZaMeteoPodatke"));
 
         while (!prekid_obrade) {
-            c = spojiSeNaBazu(db_driver, db_Host, db_name, db_Username, db_Password);
+            if (!ObradaZahtjeva.pause == true) {
+                //c = spojiSeNaBazu(db_driver, db_Host, db_name, db_Username, db_Password);
 
-            OWMKlijent owmk = new OWMKlijent(apikey);
+                //OWMKlijent owmk = new OWMKlijent(apikey);
 
-            /**
-             * Dohvaćanje svih uređaja iz baze podataa uz pomoć metode
-             * sviUredjaji() i nakon toga njihovo spremanje u bazu podataka
-             */
-            String upisiUTablicuMeteo = "INSERT INTO meteo (id, adresaStanice, latitude, longitude, vrijeme, vrijemeOpis, temp, tempMin, tempMax, vlaga, tlak, vjetar,"
-                    + "vjetarSmjer, preuzeto) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,default)";
-            PreparedStatement upisiInsert;
-            try {
-                ResultSet resultSet = sviUredjaji();
-                while (resultSet.next()) {
-                    System.out.println("PROBA: " + resultSet.getString(3) + " " + resultSet.getString(4));
-                    MeteoPodaci mp = owmk.getRealTimeWeather(resultSet.getString(3), resultSet.getString(4));
-                    upisiInsert = c.prepareStatement(upisiUTablicuMeteo);
-                    upisiInsert.setInt(1, resultSet.getInt(1));
-                    upisiInsert.setString(2, resultSet.getString(2));
-                    upisiInsert.setString(3, resultSet.getString(3));
-                    upisiInsert.setString(4, resultSet.getString(4));
-                    upisiInsert.setString(5, "");
-                    upisiInsert.setString(6, "");
-                    upisiInsert.setFloat(7, mp.getTemperatureValue());
-                    upisiInsert.setFloat(8, mp.getTemperatureMin());
-                    upisiInsert.setFloat(9, mp.getTemperatureMax());
-                    upisiInsert.setFloat(10, mp.getHumidityValue());
-                    upisiInsert.setFloat(11, mp.getPressureValue());
-                    upisiInsert.setFloat(12, mp.getWindSpeedValue());
-                    upisiInsert.setFloat(13, mp.getWindDirectionValue());
-                    upisiInsert.executeUpdate();
+                /**
+                 * Dohvaćanje svih uređaja iz baze podataa uz pomoć metode
+                 * sviUredjaji() i nakon toga njihovo spremanje u bazu podataka
+                 */
+                /*
+                String upisiUTablicuMeteo = "INSERT INTO meteo (id, adresaStanice, latitude, longitude, vrijeme, vrijemeOpis, temp, tempMin, tempMax, vlaga, tlak, vjetar,"
+                        + "vjetarSmjer, preuzeto) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,default)";
+                PreparedStatement upisiInsert;
+                try {
+                    ResultSet resultSet = sviUredjaji();
+                    while (resultSet.next()) {
+                        System.out.println("PROBA: " + resultSet.getString(3) + " " + resultSet.getString(4));
+                        MeteoPodaci mp = owmk.getRealTimeWeather(resultSet.getString(3), resultSet.getString(4));
+                        upisiInsert = c.prepareStatement(upisiUTablicuMeteo);
+                        upisiInsert.setInt(1, resultSet.getInt(1));
+                        upisiInsert.setString(2, resultSet.getString(2));
+                        upisiInsert.setString(3, resultSet.getString(3));
+                        upisiInsert.setString(4, resultSet.getString(4));
+                        upisiInsert.setString(5, "");
+                        upisiInsert.setString(6, "");
+                        upisiInsert.setFloat(7, mp.getTemperatureValue());
+                        upisiInsert.setFloat(8, mp.getTemperatureMin());
+                        upisiInsert.setFloat(9, mp.getTemperatureMax());
+                        upisiInsert.setFloat(10, mp.getHumidityValue());
+                        upisiInsert.setFloat(11, mp.getPressureValue());
+                        upisiInsert.setFloat(12, mp.getWindSpeedValue());
+                        upisiInsert.setFloat(13, mp.getWindDirectionValue());
+                        upisiInsert.executeUpdate();
 
-                    System.out.println("OVO JE ID: " + resultSet.getInt(1));
-                    System.out.println("OVO JE Naziv: " + resultSet.getString(2));
+                        System.out.println("OVO JE ID: " + resultSet.getInt(1));
+                        System.out.println("OVO JE Naziv: " + resultSet.getString(2));
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(PreuzmiMeteoPodatke.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(PreuzmiMeteoPodatke.class.getName()).log(Level.SEVERE, null, ex);
+*/
+                
+                System.out.println("PVP IJFOIEJFOIJEFOIJEFOIEJFOIEJEOIJFEOJFEJFIJFOIEJFOIEJF");
+                System.out.println("PVP IJFOIEJFOIJEFOIJEFOIEJFOIEJEOIJFEOJFEJFIJFOIEJFOIEJF");
+                System.out.println("PVP IJFOIEJFOIJEFOIJEFOIEJFOIEJEOIJFEOJFEJFIJFOIEJFOIEJF");
+                System.out.println("PVP IJFOIEJFOIJEFOIJEFOIEJFOIEJEOIJFEOJFEJFIJFOIEJFOIEJF");
+                        System.out.println("PVP IJFOIEJFOIJEFOIJEFOIEJFOIEJEOIJFEOJFEJFIJFOIEJFOIEJF");
+                        System.out.println("PVP IJFOIEJFOIJEFOIJEFOIEJFOIEJEOIJFEOJFEJFIJFOIEJFOIEJF");
+                        System.out.println("PVP IJFOIEJFOIJEFOIJEFOIEJFOIEJEOIJFEOJFEJFIJFOIEJFOIEJF");
+                        
+                
+            }else{
+                ObradaZahtjeva.pause = false;
+                System.out.println("POSTAJE FALSE");
             }
 
             try {

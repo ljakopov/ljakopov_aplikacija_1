@@ -100,7 +100,7 @@ public class UserRESTsResourceContainer {
         }
 
         long kraj = System.currentTimeMillis();
-        Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "getJson()-user", "REST-web");
+        Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "getJson()-user", "REST-web", "", "");
         return jab.build().toString();
     }
 
@@ -146,7 +146,7 @@ public class UserRESTsResourceContainer {
             JsonObjectBuilder job = Json.createObjectBuilder();
             job.add("odgovor", "1");
             long kraj = System.currentTimeMillis();
-            Dnevnik.upisiUDnevnik(connection, username, (int) (kraj - pocetak), "postJson()-user", "REST-web");
+            Dnevnik.upisiUDnevnik(connection, username, (int) (kraj - pocetak), "postJson()-user", "REST-web", "", "");
             return job.build().toString();
         } else {
             JsonObjectBuilder job = Json.createObjectBuilder();
