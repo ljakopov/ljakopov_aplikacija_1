@@ -117,6 +117,7 @@ public class UserRESTsResourceContainer {
         long pocetak = System.currentTimeMillis();
         JsonReader reader = Json.createReader(new StringReader(content));
         JsonObject jo = reader.readObject();
+        System.out.println("ISPIS JSONA: " + content);
 
         String username = jo.getString("username");
         String pass = jo.getString("pass");

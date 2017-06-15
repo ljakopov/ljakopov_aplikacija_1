@@ -8,12 +8,12 @@
     <entry key="admin.database">mysql</entry>
     <entry key="user.username">nwtis_g2</entry>
     <entry key="user.password">g2_nwtis</entry>
-    <entry key="user.database">nwtis_g2_projekt</entry>
+    <entry key="user.database">nwtis_ljakopov_bp_1</entry>
     <entry key="driver.database.odbc">sun.jdbc.odbc.JdbcOdbcDriver</entry>
     <entry key="driver.database.mysql">com.mysql.jdbc.Driver</entry>
     <entry key="driver.database.derby">org.apache.derby.jdbc.ClientDriver</entry>
     <entry key="driver.database.postgresql">org.postgresql.Driver</entry>
-    <entry key="intervalDretveZaMeteoPodatke">60</entry>
+    <entry key="intervalDretveZaMeteoPodatke">120</entry>
     <entry key="apikey">73f8bbb7d2439f4fdf7d2bc55acd4ebf</entry>
     <entry key="port">8000</entry>
 </properties>

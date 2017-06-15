@@ -19,7 +19,7 @@ import org.foi.nwtis.ljakopov.konfiguracije.Konfiguracija;
  */
 public class ServerSustava extends Thread {
 
-    private boolean prekid_obrade = false;
+    public static boolean prekid_obrade = false;
     private ServletContext sc = null;
     private ServerSocket serverSocket;
 
@@ -27,6 +27,7 @@ public class ServerSustava extends Thread {
         Konfiguracija konf = (Konfiguracija) sc.getAttribute("Mail_Konfig");
         int port = Integer.parseInt(konf.dajPostavku("port"));
         try {
+            System.out.println("ONA JE POREKNUTA");
             serverSocket = new ServerSocket(port);
         } catch (IOException ex) {
             System.out.println("PORT JE VEĆ OTVOREN");
@@ -36,6 +37,7 @@ public class ServerSustava extends Thread {
 
     @Override
     public void interrupt() {
+        prekid_obrade=true;
         try {
             System.out.println("OVO JE PREKID RADA S PORTOM");
             this.serverSocket.close();
@@ -50,15 +52,14 @@ public class ServerSustava extends Thread {
         Konfiguracija konf = (Konfiguracija) sc.getAttribute("Mail_Konfig");
         //super.run(); //To change body of generated methods, choose Tools | Templates.
         otvaranjeServerSocketa();
-        while (true) {
+        while (!prekid_obrade) {
             Socket socket = null;
             try {
                 socket = serverSocket.accept();
-
             } catch (IOException ex) {
                 System.out.println("PORT JE OTVOREN ipak");
                 Logger.getLogger(ServerSustava.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            } 
             ObradaZahtjeva obradaZahtjeva = new ObradaZahtjeva(socket, konf);
             obradaZahtjeva.start();
         }
@@ -67,6 +68,7 @@ public class ServerSustava extends Thread {
     @Override
     public synchronized void start() {
         try {
+            System.out.println("IDE POMALO");
             Thread.sleep(2000); // 2 s
         } catch (InterruptedException ex) {
             Logger.getLogger(ServerSustava.class.getName()).log(Level.SEVERE, null, ex);

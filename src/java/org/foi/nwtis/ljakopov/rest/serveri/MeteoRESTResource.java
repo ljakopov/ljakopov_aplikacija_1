@@ -87,7 +87,7 @@ public class MeteoRESTResource {
      * @return an instance of java.lang.String
      */
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public String getJson() {
         long pocetak = System.currentTimeMillis();
         Connection connection = BazaPodataka.konekcijaNaBazu(c);
@@ -116,12 +116,15 @@ public class MeteoRESTResource {
          */
         for (Uredjaj uredjaj : uredjaji) {
             if (uredjaj.getId() == Integer.parseInt(this.id)) {
+                GMKlijent gmk = new GMKlijent();
+                String adresa = gmk.getGeoLocationFromLatLot(uredjaj.getGeoloc().getLatitude(), uredjaj.getGeoloc().getLongitude());
                 JsonArrayBuilder jab = Json.createArrayBuilder();
                 JsonObjectBuilder job = Json.createObjectBuilder();
                 job.add("uid", uredjaj.getId());
                 job.add("naziv", uredjaj.getNaziv());
                 job.add("lat", uredjaj.getGeoloc().getLatitude());
                 job.add("lon", uredjaj.getGeoloc().getLongitude());
+                job.add("adresa", adresa);
                 jab.add(job);
                 long kraj = System.currentTimeMillis();
                 Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "getJson()-meteo", "REST-web", "localhost", "/ljakopov_aplikacija_1/webresources/meteoRESTs/" + id);
@@ -146,6 +149,7 @@ public class MeteoRESTResource {
 
         String naziv = jo.getString("naziv");
         String adresa = jo.getString("adresa");
+        System.out.println("ISPIS NA POS: " + naziv + " " + adresa + " " + id);
 
         Connection connection = BazaPodataka.konekcijaNaBazu(c);
         if (provjeriId(id) == true) {

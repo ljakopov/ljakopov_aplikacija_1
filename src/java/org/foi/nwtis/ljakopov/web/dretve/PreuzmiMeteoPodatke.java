@@ -87,15 +87,14 @@ public class PreuzmiMeteoPodatke extends Thread {
 
         while (!prekid_obrade) {
             if (!ObradaZahtjeva.pause == true) {
-                //c = spojiSeNaBazu(db_driver, db_Host, db_name, db_Username, db_Password);
+                c = spojiSeNaBazu(db_driver, db_Host, db_name, db_Username, db_Password);
 
-                //OWMKlijent owmk = new OWMKlijent(apikey);
+                OWMKlijent owmk = new OWMKlijent(apikey);
 
                 /**
                  * Dohvaćanje svih uređaja iz baze podataa uz pomoć metode
                  * sviUredjaji() i nakon toga njihovo spremanje u bazu podataka
                  */
-                /*
                 String upisiUTablicuMeteo = "INSERT INTO meteo (id, adresaStanice, latitude, longitude, vrijeme, vrijemeOpis, temp, tempMin, tempMax, vlaga, tlak, vjetar,"
                         + "vjetarSmjer, preuzeto) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,default)";
                 PreparedStatement upisiInsert;
@@ -126,18 +125,7 @@ public class PreuzmiMeteoPodatke extends Thread {
                 } catch (SQLException ex) {
                     Logger.getLogger(PreuzmiMeteoPodatke.class.getName()).log(Level.SEVERE, null, ex);
                 }
-*/
-                
-                System.out.println("PVP IJFOIEJFOIJEFOIJEFOIEJFOIEJEOIJFEOJFEJFIJFOIEJFOIEJF");
-                System.out.println("PVP IJFOIEJFOIJEFOIJEFOIEJFOIEJEOIJFEOJFEJFIJFOIEJFOIEJF");
-                System.out.println("PVP IJFOIEJFOIJEFOIJEFOIEJFOIEJEOIJFEOJFEJFIJFOIEJFOIEJF");
-                System.out.println("PVP IJFOIEJFOIJEFOIJEFOIEJFOIEJEOIJFEOJFEJFIJFOIEJFOIEJF");
-                        System.out.println("PVP IJFOIEJFOIJEFOIJEFOIEJFOIEJEOIJFEOJFEJFIJFOIEJFOIEJF");
-                        System.out.println("PVP IJFOIEJFOIJEFOIJEFOIEJFOIEJEOIJFEOJFEJFIJFOIEJFOIEJF");
-                        System.out.println("PVP IJFOIEJFOIJEFOIJEFOIEJFOIEJEOIJFEOJFEJFIJFOIEJFOIEJF");
-                        
-                
-            }else{
+            } else {
                 ObradaZahtjeva.pause = false;
                 System.out.println("POSTAJE FALSE");
             }

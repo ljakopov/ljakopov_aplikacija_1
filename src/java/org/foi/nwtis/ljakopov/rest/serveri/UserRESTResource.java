@@ -111,6 +111,7 @@ public class UserRESTResource {
         long kraj = System.currentTimeMillis();
         Dnevnik.upisiUDnevnik(connection, korisnickoIme, (int) (kraj - pocetak), "getJson()-userID", "REST-web", "localhost", "/ljakopov_aplikacija_1/webresources/userREST/"+korisnickoIme);
 
+        
         return jab.build().toString();
     }
 
@@ -128,6 +129,7 @@ public class UserRESTResource {
         JsonObject jo = reader.readObject();
         Connection connection = BazaPodataka.konekcijaNaBazu(c);
 
+        String korisnickoIme = jo.getString("username");
         String pass = jo.getString("pass");
         String prezime = jo.getString("prezime");
         String email = jo.getString("email");

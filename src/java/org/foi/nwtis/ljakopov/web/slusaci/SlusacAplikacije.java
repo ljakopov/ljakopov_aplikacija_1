@@ -52,8 +52,8 @@ public class SlusacAplikacije implements ServletContextListener {
         } catch (NemaKonfiguracije | NeispravnaKonfiguracija ex) {
             Logger.getLogger(SlusacAplikacije.class.getName()).log(Level.SEVERE, null, ex);
         }
-       // pokreniServer();
-        pokreniPreuzimanjePodataka();
+        pokreniServer();
+        //pokreniPreuzimanjePodataka();
     }
 
     private void pokreniServer() {
@@ -61,17 +61,25 @@ public class SlusacAplikacije implements ServletContextListener {
         ss.setSc(context);
         ss.start();
     }
-    private void pokreniPreuzimanjePodataka(){
+
+    private void pokreniPreuzimanjePodataka() {
         pmp = new PreuzmiMeteoPodatke();
         pmp.setSc(context);
         pmp.start();
-        
+
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        if (pmp != null) {
+        if (pmp != null && pmp.isAlive()) {
             pmp.interrupt();
+        }
+        zaustaviServerSocket();
+    }
+
+    private void zaustaviServerSocket() {
+        if (ss != null && ss.isAlive()) {
+            ss.interrupt();
         }
     }
 

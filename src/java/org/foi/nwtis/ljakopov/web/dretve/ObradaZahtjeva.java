@@ -74,10 +74,8 @@ public class ObradaZahtjeva extends Thread {
                         if (pause == false) {
                             pause = true;
                             os.write("OK 10; Server se nalazi u PAUSE".getBytes());
-                            os.flush();
                         } else {
                             os.write("ERROR 10; Server se  nalazi u stanju PAUSE".getBytes());
-                            os.flush();
                         }
                         kraj = System.currentTimeMillis();
                         System.out.println("IPADRESSA: " + socket.getRemoteSocketAddress().toString());
@@ -87,36 +85,37 @@ public class ObradaZahtjeva extends Thread {
                         if (pause == true) {
                             pause = false;
                             os.write("OK 10; Server se nalazi u START(server je bio u PAUSE)".getBytes());
-                            os.flush();
                         } else {
                             os.write("ERROR 11; Server se ne nalazi u stanju PAUSE".getBytes());
-                            os.flush();
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, m.group(1), (int) (kraj - pocetak), "serverSocket - START", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                     case "STOP;":
-                        //TODO dodaj STOP u server socket
+                        if (ServerSustava.prekid_obrade == true) {
+                            os.write("ERR 12; Server se nalazi u stanju prekidanja".getBytes());
+                        } else {
+                            ServerSustava.prekid_obrade = true;
+                            os.write("OK 10; Server se nije lanazio u stanju prekidanja".getBytes());
+                        }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, m.group(1), (int) (kraj - pocetak), "serverSocket - STOP", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                     case "STATUS;":
                         if (pause == true) {
-                            os.write("OK 13; Server privremeno ne preuzima podatke".getBytes());
-                            os.flush();
+                            os.write("OK 13; Server ne preuzima podatke".getBytes());
                         } else if (pause == false) {
-                            os.write("OK 14; Server Privremeno  preuzima podatke".getBytes());
-                            os.flush();
-                        } else {
-                            os.write("OK 15; Server ništa ne preuzima".getBytes());
-                            os.flush();
+                            os.write("OK 14; Server preuzima podatke".getBytes());
+                        }
+                        if (ServerSustava.prekid_obrade == true) {
+                            os.write("OK 15; Server ne radi".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, m.group(1), (int) (kraj - pocetak), "serverSocket - STATUS", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                 }
             } else {
-                System.out.println("Primljeni odgovor: ERROR 10: Korisnik ne postoji");
+                os.write("ERR 10;".getBytes());
             }
         } else if (statusIoT_Master) {
             if (provjeriKorisnickoImeILozinku(mIoT_Master.group(1), mIoT_Master.group(2), connection)) {
@@ -127,9 +126,9 @@ public class ObradaZahtjeva extends Thread {
                     case "START;":
                         registriranaGrupa = IoT_MasterWSKlijent.registrirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
                         if (registriranaGrupa) {
-                            System.out.println("OK 10;");
+                            os.write("OK 10;".getBytes());
                         } else {
-                            System.out.println("ERR 20;");
+                            os.write("ERR 20;".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT_Master.group(1), (int) (kraj - pocetak), "IoT_Master - START", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
@@ -137,9 +136,9 @@ public class ObradaZahtjeva extends Thread {
                     case "STOP;":
                         registriranaGrupa = IoT_MasterWSKlijent.deregistrirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
                         if (registriranaGrupa) {
-                            System.out.println("OK 10;");
+                            os.write("OK 10;".getBytes());
                         } else {
-                            System.out.println("ERR 21;");
+                            os.write("ERR 21;".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT_Master.group(1), (int) (kraj - pocetak), "IoT_Master - STOP", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
@@ -147,9 +146,9 @@ public class ObradaZahtjeva extends Thread {
                     case "WORK;":
                         aktivnaGrupa = IoT_MasterWSKlijent.aktivirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
                         if (aktivnaGrupa) {
-                            System.out.println("OK 10;");
+                            os.write("OK 10;".getBytes());
                         } else {
-                            System.out.println("ERR 22;");
+                            os.write("ERR 22;".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT_Master.group(1), (int) (kraj - pocetak), "IoT_Master - WORK", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
@@ -158,21 +157,21 @@ public class ObradaZahtjeva extends Thread {
                         System.out.println("OVO JE WAIT");
                         aktivnaGrupa = IoT_MasterWSKlijent.blokirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
                         if (aktivnaGrupa) {
-                            System.out.println("OK 10;");
+                            os.write("OK 10;".getBytes());
                         } else {
-                            System.out.println("ERR 23;");
+                            os.write("ERR 23;".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT_Master.group(1), (int) (kraj - pocetak), "IoT_Master - WAIT", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                     case "LOAD;":
                         IoT_MasterWSKlijent.ucitajSveUredjajeGrupe(mIoT_Master.group(1), mIoT_Master.group(2));
-                        System.out.println("OK 10;");
+                        os.write("OK 10;".getBytes());
                         Dnevnik.upisiUDnevnik(connection, mIoT_Master.group(1), (int) (kraj - pocetak), "IoT_Master - LOAD", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                     case "CLEAR;":
                         IoT_MasterWSKlijent.obrisiSveUredjajeGrupe(mIoT_Master.group(1), mIoT_Master.group(2));
-                        System.out.println("OK 10;");
+                        os.write("OK 10;".getBytes());
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT_Master.group(1), (int) (kraj - pocetak), "IoT_Master - CLEAR", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
@@ -193,7 +192,7 @@ public class ObradaZahtjeva extends Thread {
                         break;
                 }
             } else {
-                System.out.println("Primljeni odgovor: ERROR 10: Korisnik ne postoji");
+                os.write("ERR 10;".getBytes());
             }
         } else if (statusIoT) {
             if (provjeriKorisnickoImeILozinku(mIoT.group(1), mIoT.group(2), connection)) {
@@ -211,9 +210,9 @@ public class ObradaZahtjeva extends Thread {
                         //System.out.println("URL: " + socket.);
                         boolean aktivanUredjaj = IoT_MasterWSKlijent.aktivirajUredjajGrupe(mIoT.group(1), mIoT.group(2), Integer.parseInt(mIoT.group(3)));
                         if (aktivanUredjaj) {
-                            System.out.println("OK 10;");
+                            os.write("OK 10;".getBytes());
                         } else {
-                            System.out.println("ERR 31");
+                            os.write("ERR 31;".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT.group(1), (int) (kraj - pocetak), "IoT - WORK", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
@@ -221,9 +220,9 @@ public class ObradaZahtjeva extends Thread {
                     case "WAIT;":
                         boolean blokiranUredjaj = IoT_MasterWSKlijent.blokirajUredjajGrupe(mIoT.group(1), mIoT.group(2), Integer.parseInt(mIoT.group(3)));
                         if (blokiranUredjaj) {
-                            System.out.println("OK 10;");
+                            os.write("OK 10;".getBytes());
                         } else {
-                            System.out.println("ERR 32");
+                            os.write("ERR 32;".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT.group(1), (int) (kraj - pocetak), "IoT - WAIT", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
@@ -231,9 +230,9 @@ public class ObradaZahtjeva extends Thread {
                     case "REMOVE;":
                         boolean obrisaniUredjaj = IoT_MasterWSKlijent.obrisiUredjajGrupe(mIoT.group(1), mIoT.group(2), Integer.parseInt(mIoT.group(3)));
                         if (obrisaniUredjaj) {
-                            System.out.println("OK 10;");
+                            os.write("OK 10;".getBytes());
                         } else {
-                            System.out.println("ERR 32");
+                            os.write("ERR 33;".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT.group(1), (int) (kraj - pocetak), "IoT - REMOVE", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
@@ -241,18 +240,19 @@ public class ObradaZahtjeva extends Thread {
                     case "STATUS;":
                         StatusUredjaja statusUredjaja = IoT_MasterWSKlijent.dajStatusUredjajaGrupe(mIoT.group(1), mIoT.group(2), Integer.parseInt(mIoT.group(3)));
                         if ("AKTIVAN".equals(statusUredjaja.toString())) {
-                            System.out.println("OK 35;");
+                            os.write("OK 35;".getBytes());
                         } else {
-                            System.out.println("OK 34;");
+                            os.write("OK 34;".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT.group(1), (int) (kraj - pocetak), "IoT - STATUS", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                 }
             } else {
-                System.out.println("Primljeni odgovor: ERROR 10: Korisnik ne postoji");
+                os.write("ERR 10;".getBytes());
             }
         }
+        os.flush();
     }
 
     private boolean provjeriKorisnickoImeILozinku(String korisnickoIme, String lozinka, Connection connection) {
