@@ -119,9 +119,8 @@ public class MeteoServiceWS {
     @WebMethod(operationName = "dajZadnjiMeteoPodatakZaUredjaj")
     public MeteoPodaci dajZadnjiMeteoPodatakZaUredjaj(@WebParam(name = "username") String username, @WebParam(name = "pass") String pass, @WebParam(name = "id") int id) {
         MeteoPodaci meteoPodaci = null;
+        long pocetak = System.currentTimeMillis();
         if (provjeriKorisnickoImeILozinku(username, pass) == true) {
-
-            long pocetak = System.currentTimeMillis();
 
             String vracajZadnjiId = "SELECT * FROM METEO WHERE ID=? ORDER BY IDMETEO DESC LIMIT 1";
 
@@ -136,9 +135,9 @@ public class MeteoServiceWS {
             } catch (SQLException ex) {
                 Logger.getLogger(MeteoServiceWS.class.getName()).log(Level.SEVERE, null, ex);
             }
-            long kraj = System.currentTimeMillis();
-            upisiUDnevnik(username, (int) (kraj - pocetak), "dajZadnjiMeteoPodatakZaUredjaj()", "SOAP-web");
         }
+        long kraj = System.currentTimeMillis();
+        upisiUDnevnik(username, (int) (kraj - pocetak), "dajZadnjiMeteoPodatakZaUredjaj()", "SOAP-web");
         return meteoPodaci;
     }
 
@@ -148,8 +147,8 @@ public class MeteoServiceWS {
     @WebMethod(operationName = "dajPosljednihNMeteoPodatakaZaUredjaj")
     public java.util.List<MeteoPodaci> dajPosljednihNMeteoPodatakaZaUredjaj(@WebParam(name = "username") String username, @WebParam(name = "pass") String pass, @WebParam(name = "id") int id, @WebParam(name = "n") int n) {
         List<MeteoPodaci> listaMeteroloskiPodataka = new ArrayList<>();
+        long pocetak = System.currentTimeMillis();
         if (provjeriKorisnickoImeILozinku(username, pass) == true) {
-            long pocetak = System.currentTimeMillis();
 
             String vracajZadnjeNPodatke = "SELECT * FROM METEO WHERE ID=? ORDER BY IDMETEO DESC LIMIT ?";
             PreparedStatement ps;
@@ -164,9 +163,9 @@ public class MeteoServiceWS {
             } catch (SQLException ex) {
                 Logger.getLogger(MeteoServiceWS.class.getName()).log(Level.SEVERE, null, ex);
             }
-            long kraj = System.currentTimeMillis();
-            upisiUDnevnik(username, (int) (kraj - pocetak), "dajPosljednihNMeteoPodatakaZaUredjaj()", "SOAP-web");
         }
+        long kraj = System.currentTimeMillis();
+        upisiUDnevnik(username, (int) (kraj - pocetak), "dajPosljednihNMeteoPodatakaZaUredjaj()", "SOAP-web");
         return listaMeteroloskiPodataka;
     }
 
@@ -176,8 +175,8 @@ public class MeteoServiceWS {
     @WebMethod(operationName = "dajMeteoPodatkeZaUredjajOdDoDatum")
     public java.util.List<MeteoPodaci> dajMeteoPodatkeZaUredjajOdDoDatum(@WebParam(name = "username") String username, @WebParam(name = "pass") String pass, @WebParam(name = "id") int id, @WebParam(name = "from") long from, @WebParam(name = "to") long to) {
         List<MeteoPodaci> listaMeteroloskiPodataka = new ArrayList<>();
+        long pocetak = System.currentTimeMillis();
         if (provjeriKorisnickoImeILozinku(username, pass) == true) {
-            long pocetak = System.currentTimeMillis();
             Date pocetakTime = new Date(from * 1000);
             Date krajTime = new Date(to * 1000);
             Timestamp vrijeme_od = new Timestamp(pocetakTime.getTime());
@@ -198,10 +197,9 @@ public class MeteoServiceWS {
             } catch (SQLException ex) {
                 Logger.getLogger(MeteoServiceWS.class.getName()).log(Level.SEVERE, null, ex);
             }
-            long kraj = System.currentTimeMillis();
-            upisiUDnevnik(username, (int) (kraj - pocetak), "dajMeteoPodatkeZaUredjajOdDoDatum()", "SOAP-web");
-
         }
+        long kraj = System.currentTimeMillis();
+        upisiUDnevnik(username, (int) (kraj - pocetak), "dajMeteoPodatkeZaUredjajOdDoDatum()", "SOAP-web");
         return listaMeteroloskiPodataka;
     }
 
@@ -211,8 +209,8 @@ public class MeteoServiceWS {
     @WebMethod(operationName = "dajMeteoPodatkeZaUredjaj")
     public MeteoPodaci dajMeteoPodatkeZaUredjaj(@WebParam(name = "username") String username, @WebParam(name = "pass") String pass, @WebParam(name = "id") int id) {
         MeteoPodaci meteoPodaci = null;
+        long pocetak = System.currentTimeMillis();
         if (provjeriKorisnickoImeILozinku(username, pass) == true) {
-            long pocetak = System.currentTimeMillis();
             String api = konf.dajPostavku("apikey");
             OWMKlijent owmk = new OWMKlijent(api);
             String vracajvazeceMeteroloskePodatkeZaUredjaj = "SELECT * FROM uredaji WHERE ID=?";
@@ -228,10 +226,9 @@ public class MeteoServiceWS {
             } catch (SQLException ex) {
                 Logger.getLogger(MeteoServiceWS.class.getName()).log(Level.SEVERE, null, ex);
             }
-            long kraj = System.currentTimeMillis();
-            upisiUDnevnik(username, (int) (kraj - pocetak), "dajMeteoPodatkeZaUredjaj()", "SOAP-web");
         }
-
+        long kraj = System.currentTimeMillis();
+        upisiUDnevnik(username, (int) (kraj - pocetak), "dajMeteoPodatkeZaUredjaj()", "SOAP-web");
         return meteoPodaci;
     }
 
@@ -241,13 +238,13 @@ public class MeteoServiceWS {
     @WebMethod(operationName = "dajAdresuNaTemeljuLatLon")
     public String dajAdresuNaTemeljuLatLon(@WebParam(name = "username") String username, @WebParam(name = "pass") String pass, @WebParam(name = "lat") String lat, @WebParam(name = "lon") String lon) {
         String mjesto = null;
+        long pocetak = System.currentTimeMillis();
         if (provjeriKorisnickoImeILozinku(username, pass) == true) {
-            long pocetak = System.currentTimeMillis();
             GMKlijent gmk = new GMKlijent();
-            mjesto = gmk.getGeoLocationFromLatLot(lat, lon);
-            long kraj = System.currentTimeMillis();
-            upisiUDnevnik(username, (int) (kraj - pocetak), "dajAdresuNaTemeljuLatLon()", "SOAP-web");
+            mjesto = gmk.getGeoLocationFromLatLot(lat, lon);            
         }
+        long kraj = System.currentTimeMillis();
+        upisiUDnevnik(username, (int) (kraj - pocetak), "dajAdresuNaTemeljuLatLon()", "SOAP-web");
         return mjesto;
     }
 }

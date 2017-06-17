@@ -144,6 +144,8 @@ public class UserRESTsResourceContainer {
             Dnevnik.upisiUDnevnik(connection, username, (int) (kraj - pocetak), "postJson()-user", "REST-web", "localhost", "/ljakopov_aplikacija_1/webresources/userREST");
             return "1";
         } else {
+            long kraj = System.currentTimeMillis();
+            Dnevnik.upisiUDnevnik(connection, username, (int) (kraj - pocetak), "postJson()-user-krivo", "REST-web", "localhost", "/ljakopov_aplikacija_1/webresources/userREST");
             return "0";
         }
     }

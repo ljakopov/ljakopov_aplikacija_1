@@ -156,11 +156,13 @@ public class MeteoRESTResourceContainer {
                 unesiUredjaj.executeUpdate();
             } catch (SQLException ex) {
                 Logger.getLogger(MeteoRESTResourceContainer.class.getName()).log(Level.SEVERE, null, ex);
-            }            
+            }
             long kraj = System.currentTimeMillis();
             Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "postJson()-meteo", "REST-web", "localhost", "/ljakopov_aplikacija_1/webresources/meteoREST");
             return "1";
         } else {
+            long kraj = System.currentTimeMillis();
+            Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "postJson()-meteo-krivo", "REST-web", "localhost", "/ljakopov_aplikacija_1/webresources/meteoREST");
             return "0";
         }
     }

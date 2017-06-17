@@ -131,6 +131,8 @@ public class MeteoRESTResource {
                 return jab.build().toString();
             }
         }
+        long kraj = System.currentTimeMillis();
+        Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "getJson()-meteo-krivo", "REST-web", "localhost", "/ljakopov_aplikacija_1/webresources/meteoRESTs/" + id);
         return "Nepostojeci ID";
     }
 
@@ -170,6 +172,8 @@ public class MeteoRESTResource {
             Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "putJson()-meteo", "REST-web", "localhost", "/ljakopov_aplikacija_1/webresources/meteoRESTs");
             return "1";
         } else {
+            long kraj = System.currentTimeMillis();
+            Dnevnik.upisiUDnevnik(connection, "", (int) (kraj - pocetak), "putJson()-meteo-krivo", "REST-web", "localhost", "/ljakopov_aplikacija_1/webresources/meteoRESTs");
             return "0";
         }
     }

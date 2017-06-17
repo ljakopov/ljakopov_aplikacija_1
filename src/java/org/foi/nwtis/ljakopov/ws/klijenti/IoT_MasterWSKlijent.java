@@ -85,7 +85,17 @@ public class IoT_MasterWSKlijent {
         org.foi.nwtis.dkermek.ws.serveri.IoTMaster port = service.getIoTMasterPort();
         return port.dajStatusUredjajaGrupe(korisnickoIme, korisnickaLozinka, idUredjaj);
     }
-    
-    
+
+    public static java.util.List<org.foi.nwtis.dkermek.ws.serveri.Uredjaj> dajSveUredjajeGrupe(java.lang.String korisnickoIme, java.lang.String korisnickaLozinka) {
+        org.foi.nwtis.dkermek.ws.serveri.IoTMaster_Service service = new org.foi.nwtis.dkermek.ws.serveri.IoTMaster_Service();
+        org.foi.nwtis.dkermek.ws.serveri.IoTMaster port = service.getIoTMasterPort();
+        return port.dajSveUredjajeGrupe(korisnickoIme, korisnickaLozinka);
+    }
+
+    public static Boolean dodajUredjajGrupi(java.lang.String korisnickoIme, java.lang.String korisnickaLozinka, org.foi.nwtis.dkermek.ws.serveri.Uredjaj iotUredjaj) {
+        org.foi.nwtis.dkermek.ws.serveri.IoTMaster_Service service = new org.foi.nwtis.dkermek.ws.serveri.IoTMaster_Service();
+        org.foi.nwtis.dkermek.ws.serveri.IoTMaster port = service.getIoTMasterPort();
+        return port.dodajUredjajGrupi(korisnickoIme, korisnickaLozinka, iotUredjaj);
+    }
 
 }

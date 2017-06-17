@@ -9,19 +9,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.foi.nwtis.dkermek.ws.serveri.Lokacija;
 import org.foi.nwtis.dkermek.ws.serveri.StatusKorisnika;
 import org.foi.nwtis.dkermek.ws.serveri.StatusUredjaja;
+import org.foi.nwtis.dkermek.ws.serveri.Uredjaj;
 import org.foi.nwtis.ljakopov.konfiguracije.Konfiguracija;
 import org.foi.nwtis.ljakopov.pomoc.BazaPodataka;
 import org.foi.nwtis.ljakopov.pomoc.Dnevnik;
+import org.foi.nwtis.ljakopov.rest.klijenti.GMKlijent;
+//import org.foi.nwtis.ljakopov.web.podaci.Lokacija;
 import org.foi.nwtis.ljakopov.ws.klijenti.IoT_MasterWSKlijent;
 import org.foi.nwtis.ljakopov.ws.serveri.MeteoServiceWS;
 
@@ -47,7 +53,7 @@ public class ObradaZahtjeva extends Thread {
     private void procitajZahtjev(String zahtjev, OutputStream os, Connection connection) throws IOException {
         String serverSocket = "^USER ([^\\s]+); PASSWD ([^\\s]+); (PAUSE;|STOP;|START;|STATUS;)";
         String IoT_Master = "^USER ([^\\s]+); PASSWD ([^\\s]+); IoT_Master (WORK;|STOP;|START;|STATUS;|WAIT;|LOAD;|CLEAR;|LIST;)";
-        String IoT = "^USER ([^\\s]+); PASSWD ([^\\s]+); IoT ([0-9]{1,6}) (ADD \"([^\\s]+)\" \"([^\\s]+)\";|WORK;|STATUS;|WAIT;|REMOVE;)";
+        String IoT = "^USER ([^\\s]+); PASSWD ([^\\s]+); IoT ([0-9]{1,6}) (ADD \"([\\s\\S]+)\" \"([\\s\\S]+)\";|WORK;|STATUS;|WAIT;|REMOVE;)$";
 
         Pattern pattern = Pattern.compile(serverSocket);
         Matcher m = pattern.matcher(zahtjev);
@@ -186,6 +192,14 @@ public class ObradaZahtjeva extends Thread {
                         Dnevnik.upisiUDnevnik(connection, mIoT_Master.group(1), (int) (kraj - pocetak), "IoT_Master - START", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                     case "LIST;":
+                        String odgovor = "";
+                        List<Uredjaj> lista = IoT_MasterWSKlijent.dajSveUredjajeGrupe(mIoT_Master.group(1), mIoT_Master.group(2));
+                        for (Uredjaj uredjaj : lista) {
+                            odgovor += "IoT: " + uredjaj.getId() + " Adresa: " + uredjaj.getNaziv() + "; ";
+                        }
+                        System.out.println("OVO JE ODGOVOR: " + odgovor);
+                        System.out.println("PRIKAZ: " + Charset.defaultCharset());
+                        os.write(odgovor.getBytes(Charset.forName("UTF-8")));
                         //TODO sredi ispis svih LIST kod primitvnog poslužitelja
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT_Master.group(1), (int) (kraj - pocetak), "IoT_Master - LIST", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
@@ -200,14 +214,9 @@ public class ObradaZahtjeva extends Thread {
                 kraj = 0;
                 pocetak = System.currentTimeMillis();
                 switch (mIoT.group(4)) {
-                    case "ADD;":
-                        //TODO do kraja dovrsi ADD u server socketu
-                        kraj = System.currentTimeMillis();
-                        Dnevnik.upisiUDnevnik(connection, mIoT.group(1), (int) (kraj - pocetak), "IoT - ADD", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
-                        break;
                     case "WORK;":
                         System.out.println("IPADRESSA: " + socket.getRemoteSocketAddress().toString());
-                        //System.out.println("URL: " + socket.);
+                        System.out.println("URL: " + mIoT.group(3));
                         boolean aktivanUredjaj = IoT_MasterWSKlijent.aktivirajUredjajGrupe(mIoT.group(1), mIoT.group(2), Integer.parseInt(mIoT.group(3)));
                         if (aktivanUredjaj) {
                             os.write("OK 10;".getBytes());
@@ -246,6 +255,35 @@ public class ObradaZahtjeva extends Thread {
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT.group(1), (int) (kraj - pocetak), "IoT - STATUS", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
+                        break;
+                    default://ovo je add
+                        String[] nazivIAdresa = mIoT.group(4).split("\" \"");
+                        String naziv = nazivIAdresa[0].replace("ADD \"", "");
+                        String adresa = nazivIAdresa[1].replace("\";", "");
+                        System.out.println("Naziv: " + naziv);
+                        System.out.println("Adresa: " + adresa);
+
+                        GMKlijent gMKlijent = new GMKlijent();
+                        org.foi.nwtis.ljakopov.web.podaci.Lokacija l = gMKlijent.getGeoLocation(adresa);
+
+                        Lokacija lokacija = new Lokacija();
+                        lokacija.setLatitude(l.getLatitude());
+                        lokacija.setLongitude(l.getLongitude());
+
+                        Uredjaj uredjaj = new Uredjaj();
+                        uredjaj.setId(Integer.parseInt(mIoT.group(3)));
+                        uredjaj.setNaziv(naziv);
+                        uredjaj.setStatus(StatusUredjaja.BLOKIRAN);
+                        uredjaj.setGeoloc(lokacija);
+
+                        boolean dodajUredjaj = IoT_MasterWSKlijent.dodajUredjajGrupi(mIoT.group(1), mIoT.group(2), uredjaj);
+                        if (dodajUredjaj) {
+                            os.write("OK 10;".getBytes());
+                        } else {
+                            os.write("ERR 30;".getBytes());
+                        }
+                        kraj = System.currentTimeMillis();
+                        Dnevnik.upisiUDnevnik(connection, mIoT.group(1), (int) (kraj - pocetak), "IoT - ADD", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                 }
             } else {
@@ -299,6 +337,21 @@ public class ObradaZahtjeva extends Thread {
                 }
                 sb.append((char) znak);
             }
+
+            /*
+            final int bufferSize = 1024;
+            final char[] buffer = new char[bufferSize];
+            final StringBuilder sb = new StringBuilder();
+            Reader in = new InputStreamReader(is, "UTF-8");
+            for (;;) {
+                int rsz = in.read(buffer, 0, buffer.length);
+                if (rsz < 0) {
+                    break;
+                }
+                sb.append(buffer, 0, rsz);
+            }
+            in.close();
+             */
             System.out.println("Primljena naredba: " + sb);
             Connection connection = BazaPodataka.konekcijaNaBazu(c);
             procitajZahtjev(sb.toString(), os, connection);
