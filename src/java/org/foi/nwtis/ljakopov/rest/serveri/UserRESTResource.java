@@ -129,7 +129,7 @@ public class UserRESTResource {
         JsonObject jo = reader.readObject();
         Connection connection = BazaPodataka.konekcijaNaBazu(c);
 
-        String korisnickoIme = jo.getString("username");
+        String korisnickoImeNovo = jo.getString("username");
         String pass = jo.getString("pass");
         String prezime = jo.getString("prezime");
         String email = jo.getString("email");
@@ -138,14 +138,15 @@ public class UserRESTResource {
         System.out.println("prezime: " + prezime);
         System.out.println("email: " + email);
         if (provjeriKorisnickoIme(korisnickoIme) == true) {
-            String azurirajKorisnik = "UPDATE korisnik SET pass = ?, prezime = ?, email = ? WHERE username = ?";
+            String azurirajKorisnik = "UPDATE korisnik SET pass = ?, prezime = ?, email = ?, username = ? WHERE username = ?";
             PreparedStatement ps;
             try {
                 ps = connection.prepareStatement(azurirajKorisnik);
                 ps.setString(1, pass);
                 ps.setString(2, prezime);
                 ps.setString(3, email);
-                ps.setString(4, korisnickoIme);
+                ps.setString(4, korisnickoImeNovo);
+                ps.setString(5, korisnickoIme);
                 ps.executeUpdate();
             } catch (SQLException ex) {
                 Logger.getLogger(UserRESTResource.class.getName()).log(Level.SEVERE, null, ex);

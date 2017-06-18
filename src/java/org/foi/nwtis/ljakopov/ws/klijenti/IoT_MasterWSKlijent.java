@@ -98,4 +98,12 @@ public class IoT_MasterWSKlijent {
         return port.dodajUredjajGrupi(korisnickoIme, korisnickaLozinka, iotUredjaj);
     }
 
+    public static Boolean autenticirajGrupuIoT(java.lang.String korisnickoIme, java.lang.String korisnickaLozinka) {
+        org.foi.nwtis.dkermek.ws.serveri.IoTMaster_Service service = new org.foi.nwtis.dkermek.ws.serveri.IoTMaster_Service();
+        org.foi.nwtis.dkermek.ws.serveri.IoTMaster port = service.getIoTMasterPort();
+        return port.autenticirajGrupuIoT(korisnickoIme, korisnickaLozinka);
+    }
+    
+    
+
 }

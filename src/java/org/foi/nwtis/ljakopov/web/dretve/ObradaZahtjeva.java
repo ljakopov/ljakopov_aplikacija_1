@@ -27,7 +27,6 @@ import org.foi.nwtis.ljakopov.konfiguracije.Konfiguracija;
 import org.foi.nwtis.ljakopov.pomoc.BazaPodataka;
 import org.foi.nwtis.ljakopov.pomoc.Dnevnik;
 import org.foi.nwtis.ljakopov.rest.klijenti.GMKlijent;
-//import org.foi.nwtis.ljakopov.web.podaci.Lokacija;
 import org.foi.nwtis.ljakopov.ws.klijenti.IoT_MasterWSKlijent;
 import org.foi.nwtis.ljakopov.ws.serveri.MeteoServiceWS;
 
@@ -130,77 +129,114 @@ public class ObradaZahtjeva extends Thread {
                 pocetak = System.currentTimeMillis();
                 switch (mIoT_Master.group(3)) {
                     case "START;":
-                        registriranaGrupa = IoT_MasterWSKlijent.registrirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
-                        if (registriranaGrupa) {
-                            os.write("OK 10;".getBytes());
+                        boolean prijavaStart = IoT_MasterWSKlijent.autenticirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
+                        if (prijavaStart) {
+                            registriranaGrupa = IoT_MasterWSKlijent.registrirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
+                            if (registriranaGrupa) {
+                                os.write("OK 10;".getBytes());
+                            } else {
+                                os.write("ERR 20;".getBytes());
+                            }
                         } else {
-                            os.write("ERR 20;".getBytes());
+                            os.write("ERR;".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT_Master.group(1), (int) (kraj - pocetak), "IoT_Master - START", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                     case "STOP;":
-                        registriranaGrupa = IoT_MasterWSKlijent.deregistrirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
-                        if (registriranaGrupa) {
-                            os.write("OK 10;".getBytes());
+                        boolean prijavaStop = IoT_MasterWSKlijent.autenticirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
+                        if (prijavaStop) {
+                            registriranaGrupa = IoT_MasterWSKlijent.deregistrirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
+                            if (registriranaGrupa) {
+                                os.write("OK 10;".getBytes());
+                            } else {
+                                os.write("ERR 21;".getBytes());
+                            }
                         } else {
-                            os.write("ERR 21;".getBytes());
+                            os.write("ERR;".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT_Master.group(1), (int) (kraj - pocetak), "IoT_Master - STOP", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                     case "WORK;":
-                        aktivnaGrupa = IoT_MasterWSKlijent.aktivirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
-                        if (aktivnaGrupa) {
-                            os.write("OK 10;".getBytes());
+                        boolean prijavaWork = IoT_MasterWSKlijent.autenticirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
+                        if (prijavaWork) {
+                            aktivnaGrupa = IoT_MasterWSKlijent.aktivirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
+                            if (aktivnaGrupa) {
+                                os.write("OK 10;".getBytes());
+                            } else {
+                                os.write("ERR 22;".getBytes());
+                            }
                         } else {
-                            os.write("ERR 22;".getBytes());
+                            os.write("ERR;".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT_Master.group(1), (int) (kraj - pocetak), "IoT_Master - WORK", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                     case "WAIT;":
-                        System.out.println("OVO JE WAIT");
-                        aktivnaGrupa = IoT_MasterWSKlijent.blokirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
-                        if (aktivnaGrupa) {
-                            os.write("OK 10;".getBytes());
+                        boolean prijavaWait = IoT_MasterWSKlijent.autenticirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
+                        if (prijavaWait) {
+                            aktivnaGrupa = IoT_MasterWSKlijent.blokirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
+                            if (aktivnaGrupa) {
+                                os.write("OK 10;".getBytes());
+                            } else {
+                                os.write("ERR 23;".getBytes());
+                            }
                         } else {
-                            os.write("ERR 23;".getBytes());
+                            os.write("ERR;".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT_Master.group(1), (int) (kraj - pocetak), "IoT_Master - WAIT", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                     case "LOAD;":
-                        IoT_MasterWSKlijent.ucitajSveUredjajeGrupe(mIoT_Master.group(1), mIoT_Master.group(2));
-                        os.write("OK 10;".getBytes());
+                        boolean prijavaLoad = IoT_MasterWSKlijent.autenticirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
+                        if (prijavaLoad) {
+                            IoT_MasterWSKlijent.ucitajSveUredjajeGrupe(mIoT_Master.group(1), mIoT_Master.group(2));
+                            os.write("OK 10;".getBytes());
+                        } else {
+                            os.write("ERR;".getBytes());
+                        }
+                        kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT_Master.group(1), (int) (kraj - pocetak), "IoT_Master - LOAD", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                     case "CLEAR;":
-                        IoT_MasterWSKlijent.obrisiSveUredjajeGrupe(mIoT_Master.group(1), mIoT_Master.group(2));
-                        os.write("OK 10;".getBytes());
+                        boolean prijavaClear = IoT_MasterWSKlijent.autenticirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
+                        if (prijavaClear) {
+                            IoT_MasterWSKlijent.obrisiSveUredjajeGrupe(mIoT_Master.group(1), mIoT_Master.group(2));
+                            os.write("OK 10;".getBytes());
+                        } else {
+                            os.write("ERR;".getBytes());
+                        }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT_Master.group(1), (int) (kraj - pocetak), "IoT_Master - CLEAR", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                     case "STATUS;":
-                        StatusKorisnika statusGrupeString = IoT_MasterWSKlijent.dajStatusGrupeIoT(mIoT_Master.group(1), mIoT_Master.group(2));
-                        if ("AKTIVAN".equals(statusGrupeString.toString())) {
-                            System.out.println("OK 25;");
-                        } else {
-                            System.out.println("OK 24;");
+                        boolean prijavaStatus = IoT_MasterWSKlijent.autenticirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
+                        if (prijavaStatus) {
+                            StatusKorisnika statusGrupeString = IoT_MasterWSKlijent.dajStatusGrupeIoT(mIoT_Master.group(1), mIoT_Master.group(2));
+                            if ("AKTIVAN".equals(statusGrupeString.toString())) {
+                                System.out.println("OK 25;");
+                            } else {
+                                System.out.println("OK 24;");
+                            }
+                            kraj = System.currentTimeMillis();
                         }
-                        kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT_Master.group(1), (int) (kraj - pocetak), "IoT_Master - START", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                     case "LIST;":
-                        String odgovor = "";
-                        List<Uredjaj> lista = IoT_MasterWSKlijent.dajSveUredjajeGrupe(mIoT_Master.group(1), mIoT_Master.group(2));
-                        for (Uredjaj uredjaj : lista) {
-                            odgovor += "IoT: " + uredjaj.getId() + " Adresa: " + uredjaj.getNaziv() + "; ";
+                        boolean prijavaList = IoT_MasterWSKlijent.autenticirajGrupuIoT(mIoT_Master.group(1), mIoT_Master.group(2));
+                        if (prijavaList) {
+                            String odgovor = "";
+                            List<Uredjaj> lista = IoT_MasterWSKlijent.dajSveUredjajeGrupe(mIoT_Master.group(1), mIoT_Master.group(2));
+                            for (Uredjaj uredjaj : lista) {
+                                odgovor += "IoT: " + uredjaj.getId() + " Adresa: " + uredjaj.getNaziv() + "; ";
+                            }
+                            System.out.println("OVO JE ODGOVOR: " + odgovor);
+                            System.out.println("PRIKAZ: " + Charset.defaultCharset());
+                            os.write(odgovor.getBytes(Charset.forName("UTF-8")));
+                        } else {
+
                         }
-                        System.out.println("OVO JE ODGOVOR: " + odgovor);
-                        System.out.println("PRIKAZ: " + Charset.defaultCharset());
-                        os.write(odgovor.getBytes(Charset.forName("UTF-8")));
-                        //TODO sredi ispis svih LIST kod primitvnog poslužitelja
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT_Master.group(1), (int) (kraj - pocetak), "IoT_Master - LIST", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
@@ -215,72 +251,97 @@ public class ObradaZahtjeva extends Thread {
                 pocetak = System.currentTimeMillis();
                 switch (mIoT.group(4)) {
                     case "WORK;":
-                        System.out.println("IPADRESSA: " + socket.getRemoteSocketAddress().toString());
-                        System.out.println("URL: " + mIoT.group(3));
-                        boolean aktivanUredjaj = IoT_MasterWSKlijent.aktivirajUredjajGrupe(mIoT.group(1), mIoT.group(2), Integer.parseInt(mIoT.group(3)));
-                        if (aktivanUredjaj) {
-                            os.write("OK 10;".getBytes());
+                        boolean prijavaWork = IoT_MasterWSKlijent.autenticirajGrupuIoT(mIoT.group(1), mIoT.group(2));
+                        if (prijavaWork) {
+                            System.out.println("IPADRESSA: " + socket.getRemoteSocketAddress().toString());
+                            System.out.println("URL: " + mIoT.group(3));
+                            boolean aktivanUredjaj = IoT_MasterWSKlijent.aktivirajUredjajGrupe(mIoT.group(1), mIoT.group(2), Integer.parseInt(mIoT.group(3)));
+                            if (aktivanUredjaj) {
+                                os.write("OK 10;".getBytes());
+                            } else {
+                                os.write("ERR 31;".getBytes());
+                            }
                         } else {
-                            os.write("ERR 31;".getBytes());
+                            os.write("ERR;".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT.group(1), (int) (kraj - pocetak), "IoT - WORK", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                     case "WAIT;":
-                        boolean blokiranUredjaj = IoT_MasterWSKlijent.blokirajUredjajGrupe(mIoT.group(1), mIoT.group(2), Integer.parseInt(mIoT.group(3)));
-                        if (blokiranUredjaj) {
-                            os.write("OK 10;".getBytes());
+                        boolean prijavaWait = IoT_MasterWSKlijent.autenticirajGrupuIoT(mIoT.group(1), mIoT.group(2));
+                        if (prijavaWait) {
+                            boolean blokiranUredjaj = IoT_MasterWSKlijent.blokirajUredjajGrupe(mIoT.group(1), mIoT.group(2), Integer.parseInt(mIoT.group(3)));
+                            if (blokiranUredjaj) {
+                                os.write("OK 10;".getBytes());
+                            } else {
+                                os.write("ERR 32;".getBytes());
+                            }
                         } else {
-                            os.write("ERR 32;".getBytes());
+                            os.write("ERR;".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT.group(1), (int) (kraj - pocetak), "IoT - WAIT", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                     case "REMOVE;":
-                        boolean obrisaniUredjaj = IoT_MasterWSKlijent.obrisiUredjajGrupe(mIoT.group(1), mIoT.group(2), Integer.parseInt(mIoT.group(3)));
-                        if (obrisaniUredjaj) {
-                            os.write("OK 10;".getBytes());
+                        boolean prijavaRemove = IoT_MasterWSKlijent.autenticirajGrupuIoT(mIoT.group(1), mIoT.group(2));
+                        if (prijavaRemove) {
+                            boolean obrisaniUredjaj = IoT_MasterWSKlijent.obrisiUredjajGrupe(mIoT.group(1), mIoT.group(2), Integer.parseInt(mIoT.group(3)));
+                            if (obrisaniUredjaj) {
+                                os.write("OK 10;".getBytes());
+                            } else {
+                                os.write("ERR 33;".getBytes());
+                            }
                         } else {
-                            os.write("ERR 33;".getBytes());
+                            os.write("ERR;".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT.group(1), (int) (kraj - pocetak), "IoT - REMOVE", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                     case "STATUS;":
-                        StatusUredjaja statusUredjaja = IoT_MasterWSKlijent.dajStatusUredjajaGrupe(mIoT.group(1), mIoT.group(2), Integer.parseInt(mIoT.group(3)));
-                        if ("AKTIVAN".equals(statusUredjaja.toString())) {
-                            os.write("OK 35;".getBytes());
+                        boolean prijavaStatus = IoT_MasterWSKlijent.autenticirajGrupuIoT(mIoT.group(1), mIoT.group(2));
+                        if (prijavaStatus) {
+                            StatusUredjaja statusUredjaja = IoT_MasterWSKlijent.dajStatusUredjajaGrupe(mIoT.group(1), mIoT.group(2), Integer.parseInt(mIoT.group(3)));
+                            if ("AKTIVAN".equals(statusUredjaja.toString())) {
+                                os.write("OK 35;".getBytes());
+                            } else {
+                                os.write("OK 34;".getBytes());
+                            }
                         } else {
-                            os.write("OK 34;".getBytes());
+                            os.write("ERR;".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT.group(1), (int) (kraj - pocetak), "IoT - STATUS", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
                         break;
                     default://ovo je add
-                        String[] nazivIAdresa = mIoT.group(4).split("\" \"");
-                        String naziv = nazivIAdresa[0].replace("ADD \"", "");
-                        String adresa = nazivIAdresa[1].replace("\";", "");
-                        System.out.println("Naziv: " + naziv);
-                        System.out.println("Adresa: " + adresa);
+                        boolean prijavaAdd = IoT_MasterWSKlijent.autenticirajGrupuIoT(mIoT.group(1), mIoT.group(2));
+                        if (prijavaAdd) {
+                            String[] nazivIAdresa = mIoT.group(4).split("\" \"");
+                            String naziv = nazivIAdresa[0].replace("ADD \"", "");
+                            String adresa = nazivIAdresa[1].replace("\";", "");
+                            System.out.println("Naziv: " + naziv);
+                            System.out.println("Adresa: " + adresa);
 
-                        GMKlijent gMKlijent = new GMKlijent();
-                        org.foi.nwtis.ljakopov.web.podaci.Lokacija l = gMKlijent.getGeoLocation(adresa);
+                            GMKlijent gMKlijent = new GMKlijent();
+                            org.foi.nwtis.ljakopov.web.podaci.Lokacija l = gMKlijent.getGeoLocation(adresa);
 
-                        Lokacija lokacija = new Lokacija();
-                        lokacija.setLatitude(l.getLatitude());
-                        lokacija.setLongitude(l.getLongitude());
+                            Lokacija lokacija = new Lokacija();
+                            lokacija.setLatitude(l.getLatitude());
+                            lokacija.setLongitude(l.getLongitude());
 
-                        Uredjaj uredjaj = new Uredjaj();
-                        uredjaj.setId(Integer.parseInt(mIoT.group(3)));
-                        uredjaj.setNaziv(naziv);
-                        uredjaj.setStatus(StatusUredjaja.BLOKIRAN);
-                        uredjaj.setGeoloc(lokacija);
+                            Uredjaj uredjaj = new Uredjaj();
+                            uredjaj.setId(Integer.parseInt(mIoT.group(3)));
+                            uredjaj.setNaziv(naziv);
+                            uredjaj.setStatus(StatusUredjaja.BLOKIRAN);
+                            uredjaj.setGeoloc(lokacija);
 
-                        boolean dodajUredjaj = IoT_MasterWSKlijent.dodajUredjajGrupi(mIoT.group(1), mIoT.group(2), uredjaj);
-                        if (dodajUredjaj) {
-                            os.write("OK 10;".getBytes());
+                            boolean dodajUredjaj = IoT_MasterWSKlijent.dodajUredjajGrupi(mIoT.group(1), mIoT.group(2), uredjaj);
+                            if (dodajUredjaj) {
+                                os.write("OK 10;".getBytes());
+                            } else {
+                                os.write("ERR 30;".getBytes());
+                            }
                         } else {
-                            os.write("ERR 30;".getBytes());
+                            os.write("ERR;".getBytes());
                         }
                         kraj = System.currentTimeMillis();
                         Dnevnik.upisiUDnevnik(connection, mIoT.group(1), (int) (kraj - pocetak), "IoT - ADD", "serverSocket", socket.getRemoteSocketAddress().toString(), urlAdresa);
