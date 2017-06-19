@@ -37,7 +37,7 @@ public class ServerSustava extends Thread {
 
     @Override
     public void interrupt() {
-        prekid_obrade=true;
+        prekid_obrade = true;
         try {
             System.out.println("OVO JE PREKID RADA S PORTOM");
             this.serverSocket.close();
@@ -55,11 +55,12 @@ public class ServerSustava extends Thread {
         while (!prekid_obrade) {
             Socket socket = null;
             try {
+                System.out.println("ZUUUUUUUUUUUUUUUUUUUUUUUUUUUKFJEFMEMFEMKF");
                 socket = serverSocket.accept();
             } catch (IOException ex) {
                 System.out.println("PORT JE OTVOREN ipak");
                 Logger.getLogger(ServerSustava.class.getName()).log(Level.SEVERE, null, ex);
-            } 
+            }
             ObradaZahtjeva obradaZahtjeva = new ObradaZahtjeva(socket, konf);
             obradaZahtjeva.start();
         }
@@ -67,12 +68,12 @@ public class ServerSustava extends Thread {
 
     @Override
     public synchronized void start() {
-        try {
+      //  try {
             System.out.println("IDE POMALO");
-            Thread.sleep(2000); // 2 s
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ServerSustava.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            //Thread.sleep(2000); // 2 s
+        //} catch (InterruptedException ex) {
+        //    Logger.getLogger(ServerSustava.class.getName()).log(Level.SEVERE, null, ex);
+       // }
         super.start(); //To change body of generated methods, choose Tools | Templates.
     }
 

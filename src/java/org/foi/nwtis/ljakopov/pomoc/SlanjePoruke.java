@@ -23,7 +23,7 @@ import javax.mail.internet.MimeMessage;
 public class SlanjePoruke {
     
     
-    public String saljiPoruku(String posluzitelj, String salje, String prima, String predmet, String sadrzaj) {
+    public static String saljiPoruku(String posluzitelj, String salje, String prima, String predmet, String sadrzaj) {
         //TODO dodaj za slanje poruke prema primjeru s predavanja koji je priložen uz zadaću
 
         String status;

@@ -13,7 +13,20 @@
     <entry key="driver.database.mysql">com.mysql.jdbc.Driver</entry>
     <entry key="driver.database.derby">org.apache.derby.jdbc.ClientDriver</entry>
     <entry key="driver.database.postgresql">org.postgresql.Driver</entry>
-    <entry key="intervalDretveZaMeteoPodatke">120</entry>
-    <entry key="apikey">73f8bbb7d2439f4fdf7d2bc55acd4ebf</entry>
+    <entry key="intervalDretveZaMeteoPodatke">60</entry>
+    <entry key="apikey">165ed06ad0bd8f40128adfc7af6917ac</entry>
     <entry key="port">8000</entry>
+    <entry key="mail.server">127.0.0.1</entry>
+    <entry key="mail.port">143</entry>
+    <entry key="mail.usernameThread">ljakopov@nwtis.nastava.foi.hr</entry>
+    <entry key="mail.passwordThread">password</entry>
+    <entry key="mail.timeSecThread">120</entry>
+    <entry key="mail.numMessages">7</entry>
+    <entry key="mail.subject">NWTiS poruka</entry>
+    <entry key="mail.folderNWTiS">NWTiS_Poruke</entry>
+    <entry key="mail.folderOther">NWTiS_OstalePoruke</entry>
+    <entry key="mail.usernameStatistics">admin@nwtis.nastava.foi.hr</entry>
+    <entry key="mail.subjectStatistics">Statistika poruka</entry>
+    <entry key="mail.usernameView">servis@nwtis.nastava.foi.hr</entry>
+    <entry key="mail.passwordView">123456</entry>
 </properties>

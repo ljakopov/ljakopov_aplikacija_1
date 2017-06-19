@@ -53,7 +53,7 @@ public class SlusacAplikacije implements ServletContextListener {
             Logger.getLogger(SlusacAplikacije.class.getName()).log(Level.SEVERE, null, ex);
         }
         pokreniServer();
-        //pokreniPreuzimanjePodataka();
+        pokreniPreuzimanjePodataka();
     }
 
     private void pokreniServer() {
